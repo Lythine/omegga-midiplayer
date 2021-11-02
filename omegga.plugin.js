@@ -348,7 +348,7 @@ class midiplayer {
         if (!authorized.some(x => x.name == name)) return;
       }
       if ((!cooldowns[name]) || cooldowns[name] < Date.now()) {
-        Omegga.whisper(name, `<color="00FFFF">Now Playing: ${currentSong}</>\n${new Date(Math.round(this.midip.getSongTime()) * 1000 - this.midip.getSongTimeRemaining() * 1000).toISOString().substr(11, 8)} / ${new Date(Math.round(this.midip.getSongTime()) * 1000).toISOString().substr(11, 8)} <color="999999">(${100-this.midip.getSongPercentRemaining()}%)</>${this.config.loop ? ` (Looping)` : ``}`)
+        Omegga.whisper(name, `<color="00FFFF">Now Playing: ${currentSong}</>\n${new Date(Math.round(this.midip.getSongTime()) * 1000 - this.midip.getSongTimeRemaining() * 1000).toISOString().substr(11, 8)} / ${new Date(Math.round(this.midip.getSongTime()) * 1000).toISOString().substr(11, 8)} <color="999999">(${100-this.midip.getSongPercentRemaining()}%)</>${loop ? ` (Looping)` : ``}`)
         cooldowns[name] = Date.now() + this.config.cooldownTime;
       }
     })
