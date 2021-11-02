@@ -1,0 +1,117 @@
+{
+  "name": "midiplayer",
+  "description": "Plays midis by rapidly loading and clearing pitched component bricks",
+  "author": "Lythine",
+  "config": {
+    "authorized": {
+      "description": "If defined, commands will be locked and only usable by the specified user(s).",
+      "type": "players",
+      "default": null
+    },
+    "loop": {
+      "description": "If the song loops or not.",
+      "default": false,
+      "type": "boolean"
+    },
+    "autoplaySong": {
+      "description": "If defined, this song will automatically play when this plugin is loaded.",
+      "default": "",
+      "type": "string"
+    },
+    "noteVisibility": {
+      "description": "If the notes are visible or not.",
+      "default": true,
+      "type": "boolean"
+    },
+    "cooldownTime": {
+      "description": "Cooldown time between slash commands in ms.",
+      "default": 1000,
+      "type": "number"
+    },
+    "positionOffset": {
+      "description": "Offsets the position that the music bricks spawn by an X, Y, and Z value.",
+      "default": [0, 0, 0],
+      "type": "list",
+      "itemType": "number"
+    },
+    "volumeSetting": {
+      "description": "The volume of the song.",
+      "default": 100,
+      "type": "number"
+    }
+  },
+  "commands": [
+    {
+      "name": "/midi-load",
+      "description": "Loads a midi and then plays it. See `/midi-list`.",
+      "example": "/midi-load yoshi.mid",
+      "args": [
+        {
+          "name": "Song Name",
+          "description": "The name of the song you want to load. Case sensitive!",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "/midi-random",
+      "description": "Loads a random available song.",
+      "example": "/midi-random",
+      "args": []
+    },
+    {
+      "name": "/midi-list",
+      "description": "Lists all available songs.",
+      "example": "/midi-list",
+      "args": []
+    },
+    {
+      "name": "/midi-reload",
+      "description": "Reloads the list of songs.",
+      "example": "/midi-reload",
+      "args": []
+    },
+    {
+      "name": "/midi-play",
+      "description": "Plays the loaded song.",
+      "example": "/midi-play",
+      "args": []
+    },
+    {
+      "name": "/midi-stop",
+      "description": "Stops the current song.",
+      "example": "/midi-stop",
+      "args": []
+    },
+    {
+      "name": "/midi-pause",
+      "description": "Pauses the current song.",
+      "example": "/midi-pause",
+      "args": []
+    },
+    {
+      "name": "/midi-np",
+      "description": "Shows the progress and length of the currently loaded song.",
+      "example": "/midi-np",
+      "args": []
+    },
+    {
+      "name": "/midi-loop",
+      "description": "Toggles looping.",
+      "example": "/midi-loop",
+      "args": []
+    },
+    {
+      "name": "/midi-volume",
+      "description": "Changes the volume of the song by a positive integer.",
+      "example": "/midi-volume 50",
+      "args": [
+        {
+          "name": "Volume",
+          "description": "The volume to set the music to.",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
