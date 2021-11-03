@@ -1,6 +1,5 @@
 const fs = require('fs');
 const midi = require('midi-player-js');
-const brs = require('brs-js');
 
 const noteFile = fs.readFileSync(__dirname + "/brs/Heart2.brs");
 let midis = fs.readdirSync(__dirname + "/mid");
@@ -49,16 +48,35 @@ const clearSongBricks = (overwriteChannelSettings) => {
 let pitchTable = { // I hate this thing
   "bassThreshold": 47,
   "upperThreshold": 77,
-  "38": 0.63, // 38 - 47 Are only meant to be used for BA_AMB_Component_Air_Conditioning_Buzzy_2
-  "39": 0.68, 
-  "40": 0.73, 
-  "41": 0.77, 
-  "42": 0.87, 
-  "43": 0.82, 
-  "44": 0.92, 
-  "45": 0.97, 
-  "46": 1.03, 
-  "47": 1.09, 
+  "19": 0.4, // 19 - 47 Are only meant to be used for BA_MUS_Component_Thunderpunch_Drone
+  "20": 0.42,
+  "21": 0.45,
+  "22": 0.47,
+  "23": 0.5,
+  "24": 0.53,
+  "25": 0.56,
+  "26": 0.59,
+  "27": 0.63,
+  "28": 0.67,
+  "29": 0.71,
+  "30": 0.75,
+  "31": 0.79,
+  "32": 0.84,
+  "33": 0.89,
+  "34": 0.94,
+  "35": 1,
+  "36": 1.06,
+  "37": 1.12,
+  "38": 1.19, 
+  "39": 1.26, 
+  "40": 1.33, 
+  "41": 1.41, 
+  "42": 1.49, 
+  "43": 1.59, 
+  "44": 1.67, 
+  "45": 1.78, 
+  "46": 1.88, 
+  "47": 2, 
   "48": 0.4, // 48 - 76 Are only meant to be used for BA_AMB_Component_Hospital_Monitors_Heart_3
   "49": 0.42,
   "50": 0.45,
@@ -147,12 +165,12 @@ class midiplayer {
           deathTimers[event.channel] = [];
         }
         if (pitchTable[event.noteNumber]) {
-          let note = brs.read(noteFile);
+          let note = OMEGGA_UTIL.brs.read(noteFile);
           if (event.noteNumber <= pitchTable.bassThreshold) {
-            note.bricks[0].components.BCD_AudioEmitter.AudioDescriptor = "BA_AMB_Component_Air_Conditioning_Buzzy_2";
+            note.bricks[0].components.BCD_AudioEmitter.AudioDescriptor = "BA_MUS_Component_Thunderpunch_Drone";
             note.bricks[0].color = [0, 255, 0];
             deathTimers[event.channel][event.noteNumber] = setTimeout(function() {deathTimer(event.channel, event.noteNumber)}, 3000 / pitchTable[event.noteNumber]);
-            note.bricks[0].components.BCD_AudioEmitter.VolumeMultiplier = ((event.velocity/110) * (channelSettings[event.channel - 1].volume ? channelSettings[event.channel - 1].volume : 1)) * (volumeSetting/100);
+            note.bricks[0].components.BCD_AudioEmitter.VolumeMultiplier = ((event.velocity/115) * (channelSettings[event.channel - 1].volume ? channelSettings[event.channel - 1].volume : 1)) * (volumeSetting/100);
           } else if (event.noteNumber >= pitchTable.upperThreshold) {
             if (event.noteNumber == pitchTable.upperThreshold || event.noteNumber - 1 == pitchTable.upperThreshold) {
               note.bricks[0].components.BCD_AudioEmitter.AudioDescriptor = "BA_AMB_Component_Hospital_Monitors_Heart_3";
