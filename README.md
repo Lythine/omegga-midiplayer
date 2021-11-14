@@ -21,9 +21,11 @@
  These can be set using the omegga webpanel.
  - `authorized` - A list of players. If more or one player is defined here, only the specified user(s) can use this plugin's commands.
  - `loop` - Turns looping on or off. Defaults to off.
+ - `shuffle` - If set, will play a different song after a song finishes. Has three options: off, alphabetical, and random. Defaults to off.
  - `autoplaySong` - If defined, this song will immediately load and begin playing when the plugin is loaded.
  - `noteVisibility` - Turns the visibility of note bricks on or off. Defaults to on.
+ - `noteGlowing` - Turns the glowing material of note bricks on or off. Defaults to on.
  - `cooldownTime` - In milliseconds, how long players have to wait inbetween commands. Defaults to 1000.
  - `positionOffset` - X, Y, and Z coordinate values that will offset the midi player's bricks. Defaults to 0 0 0. It's recommended to use the `tp` command to find where you would like to move the midi player to first.
  - `volumeSetting` - Sets the volume of the midi player when the plugin first loads. Defaults to 100.
-
+ - `disableMessages` - Disables messages that broadcast to the entire server. Defaults to off.

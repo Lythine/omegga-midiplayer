@@ -13,6 +13,12 @@
       "default": false,
       "type": "boolean"
     },
+    "shuffle": {
+      "description": "If set, will play a different song after a song finishes. Can go in alphabetical order or pick randomly.",
+      "options": ["off", "alphabetical", "random"],
+      "default": "off",
+      "type": "enum"
+    },
     "autoplaySong": {
       "description": "If defined, this song will automatically play when this plugin is loaded.",
       "default": "",
@@ -20,6 +26,11 @@
     },
     "noteVisibility": {
       "description": "If the notes are visible or not.",
+      "default": true,
+      "type": "boolean"
+    },
+    "noteGlowing": {
+      "description": "If the notes glow or not.",
       "default": true,
       "type": "boolean"
     },
@@ -38,6 +49,11 @@
       "description": "The volume of the song.",
       "default": 100,
       "type": "number"
+    },
+    "disableMessages": {
+      "description": "Disables messages that broadcast server-wide.",
+      "default": false,
+      "type": "boolean"
     }
   },
   "commands": [
