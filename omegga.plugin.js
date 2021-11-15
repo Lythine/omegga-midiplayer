@@ -6,6 +6,7 @@ let midis = fs.readdirSync(__dirname + "/mid");
 midis = midis.sort((a, b) => {
   return a.toLowerCase().localeCompare(b.toLowerCase());
 });
+let midisRandomized = [];
 
 let brickOwners = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
 let deathTimers = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
@@ -21,6 +22,18 @@ let noteGlowing = true;
 let autoplaySong = "";
 let authorized = [];
 let disableMessages = false;
+
+const shuffleArr = (arr) => {
+  let a = arr;
+  let m = a.length, t, i;
+  while (m) {
+    i = Math.floor(Math.random() * m--);
+    t = a[m];
+    a[m] = a[i];
+    a[i] = t;
+  }
+  return a;
+}
 
 const newOwner = (channel, poly) => {
   brickOwners[channel][poly] = {
@@ -246,7 +259,21 @@ class midiplayer {
       if (shuffle != "off") { 
         setTimeout(() => {
           if (shuffle == "random") {
-            fuck.loadSong(false, false);
+            if (midisRandomized.length == 0) {
+              midisRandomized = shuffleArr([...midis]);
+            }
+            if (midisRandomized[0] == currentSong) {
+              if (midisRandomized.length == 1 && midis.length > 1) {
+                midisRandomized = shuffleArr([...midis]);
+                if (midisRandomized[0] == currentSong) {
+                  midisRandomized.push(midisRandomized.splice(0, 1)[0]);
+                }
+              } else {
+                midisRandomized.push(midisRandomized.splice(0, 1)[0]);
+              }
+            }
+            fuck.loadSong(midisRandomized.shift(), false);
+
           } else if (shuffle == "alphabetical") {
             if (midis.indexOf(currentSong) == -1) {
               fuck.loadSong(false, false);
@@ -337,6 +364,9 @@ class midiplayer {
         midis = midis.sort((a, b) => {
           return a.toLowerCase().localeCompare(b.toLowerCase());
         });
+        if (midisRandomized == 0) {
+          midisRandomized = shuffleArr([...midis]);
+        }
         Omegga.whisper(name, `Song list reloaded. ${midis.length} song${midis.length > 1 ? 's' : ''} detected!`);
         cooldowns[name] = Date.now() + this.config.cooldownTime;
       }
@@ -388,8 +418,12 @@ class midiplayer {
         if (!authorized.some(x => x.name == name)) return;
       }
       if ((!cooldowns[name]) || cooldowns[name] < Date.now()) {
-        Omegga.whisper(name, `<color="00FFFF">Now Playing: ${currentSong}</>\n${new Date(Math.round(this.midip.getSongTime()) * 1000 - this.midip.getSongTimeRemaining() * 1000).toISOString().substr(11, 8)} / ${new Date(Math.round(this.midip.getSongTime()) * 1000).toISOString().substr(11, 8)} <color="999999">(${100-this.midip.getSongPercentRemaining()}%)</>${loop ? ` (Looping)` : ``}`)
-        cooldowns[name] = Date.now() + this.config.cooldownTime;
+        if (currentSong) {
+          Omegga.whisper(name, `<color="00FFFF">Now Playing: ${currentSong}</>\n${new Date(Math.round(this.midip.getSongTime()) * 1000 - this.midip.getSongTimeRemaining() * 1000).toISOString().substr(11, 8)} / ${new Date(Math.round(this.midip.getSongTime()) * 1000).toISOString().substr(11, 8)} <color="999999">(${100-this.midip.getSongPercentRemaining()}%)</>${loop ? ` (Looping)` : ``}`)
+          cooldowns[name] = Date.now() + this.config.cooldownTime;
+        } else {
+          Omegga.whisper(name, `No song is currently loaded.`);
+        }
       }
     })
 
@@ -429,18 +463,33 @@ class midiplayer {
   }
 
   async loadSong(songName, user) {
-    if (!songName) songName = midis[Math.floor(Math.random() * midis.length)];
+    if (!songName) {
+      if (midis.length <= 1) {
+        songName = midis[0];
+      } else {
+        let possibleMidis = [...midis];
+        let index = possibleMidis.indexOf(currentSong);
+        if (index >= 0) possibleMidis.splice(index, 1);
+        songName = possibleMidis[Math.floor(Math.random() * possibleMidis.length)];
+      }
+    }
     this.midip.stop();
     clearSongBricks(true);
-    this.midip.loadArrayBuffer(fs.readFileSync(__dirname + '/mid/' + songName));
-    this.midip.play();
-    currentSong = songName;
-    if (!disableMessages) {
-      if (user) {
-        Omegga.broadcast(`${user}: <color="999999">Loaded</> ${songName} <color="999999">successfully! Playing...</>`)
-      } else {
-        Omegga.broadcast(`<color="999999">Loaded</> ${songName} <color="999999">successfully! Playing...</>`)
+    try {
+      let play = fs.readFileSync(__dirname + '/mid/' + songName);
+      this.midip.loadArrayBuffer(play);
+      this.midip.play();
+      currentSong = songName;
+      if (!disableMessages) {
+        if (user) {
+          Omegga.broadcast(`${user}: <color="999999">Loaded</> ${songName} <color="999999">successfully! Playing...</>`)
+        } else {
+          Omegga.broadcast(`<color="999999">Loaded</> ${songName} <color="999999">successfully! Playing...</>`)
+        }
       }
+    } catch (err) {
+      console.log(`Could not load ${songName}: ${err}`);
+      return;
     }
   }
 }
